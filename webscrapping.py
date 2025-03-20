@@ -15,6 +15,21 @@ response = requests.get(url, headers=headers)
 # Verificando se a requisição foi bem-sucedida
 if response.status_code == 200:
     soup = BeautifulSoup(response.text, "html.parser")
-    print("Página acessada com sucesso!")
+
+    # Encontrando os nomes dos smartphones
+    produtos = soup.find_all("h2", class_="ProductCard_ProductCard_Name__U_mUQ")
+
+    # Encontrando os preços dos smartphones
+    precos = soup.find_all("p", class_="Text_Text__ARJdp Text_MobileHeadingS__HEz7L")
+
+    # Criando listas para armazenar os dados
+    lista_produtos = [produto.get_text(strip=True) for produto in produtos[:5]]
+    lista_precos = [preco.get_text(strip=True) for preco in precos[:5]]
+
+    # Exibindo os resultados no terminal
+    print("📌 Lista de Smartphones e Preços:")
+    for i in range(len(lista_produtos)):
+        print(f"{i+1}. {lista_produtos[i]} - {lista_precos[i]}")
+
 else:
-    print(f"Erro ao acessar o site. Código HTTP: {response.status_code}")
+    print(f"❌ Erro ao acessar o site. Código HTTP: {response.status_code}")
