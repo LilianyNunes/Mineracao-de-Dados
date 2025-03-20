@@ -1,5 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
+import csv
 
 # Definição do User-Agent para evitar bloqueios
 headers = {
@@ -30,6 +31,15 @@ if response.status_code == 200:
     print("📌 Lista de Smartphones e Preços:")
     for i in range(len(lista_produtos)):
         print(f"{i+1}. {lista_produtos[i]} - {lista_precos[i]}")
+
+    # Salvando os dados em um arquivo CSV
+    with open("smartphones.csv", "w", newline="", encoding="utf-8") as file:
+        writer = csv.writer(file)
+        writer.writerow(["Modelo", "Preço"])
+        for i in range(len(lista_produtos)):
+            writer.writerow([lista_produtos[i], lista_precos[i]])
+
+    print("✅ Dados salvos em smartphones.csv!")
 
 else:
     print(f"❌ Erro ao acessar o site. Código HTTP: {response.status_code}")
